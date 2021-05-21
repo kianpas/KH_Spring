@@ -10,6 +10,10 @@ public interface DemoService {
 
 	List<Dev> selectDevList();
 
-	Dev selectOneDevList(String no);
+	Dev selectOneDev(String no);
+
+	int updateDev(Dev dev);
+
+	int deleteDev(String no);
 
 }

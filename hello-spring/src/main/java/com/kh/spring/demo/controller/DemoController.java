@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -208,13 +209,51 @@ public class DemoController {
 		return "demo/devList";
 	}
 	
-	@RequestMapping(value ="/updateDev", method=RequestMethod.GET)
-	public String devUpdate(@RequestParam String no, Model model) {
+	//@RequestMapping(value ="/updateDev", method=RequestMethod.GET)
+	@GetMapping("/updateDev") //겟방식만 맵팽
+	public String devUpdateForm(@RequestParam String no, Model model) {
+		//@RequestParam(name = "no", required = true) 로 에러체크 가능
+		//파라미터의 순서는 상관없다, 모델이 먼저 나와도 상관없음
+		
 		log.info("no = {}", no);
+		try {
+		Dev dev = demoService.selectOneDev(no);
+		if(dev == null)
+			throw new IllegalArgumentException("존재하지 않는 개발자 정보 : " + no);
 		
-		Dev dev = demoService.selectOneDevList(no);
-		
-		
+		log.info("dev = {}", dev);
+		model.addAttribute("dev", dev);
+		}catch(Exception e) {
+			log.error("dev 수정페이지 오류!", e);
+			throw e;
+		}
 		return "demo/devUpdateForm";
+	}
+	
+	@RequestMapping(value ="/updateDev.do", method=RequestMethod.POST)
+	public String devUpdate(Dev dev, RedirectAttributes redirectAttr) {
+		
+		log.info("dev = {}", dev);
+		try {
+		int result = demoService.updateDev(dev);
+		redirectAttr.addFlashAttribute("msg", "dev 수정 성공");
+		}catch(Exception e) {
+			log.error("dev 수정 오류!", e); //에러로그
+			throw e;
+		}
+		return "redirect:/demo/devList.do";
+	}
+	
+	@RequestMapping(value ="/deleteDev.do", method=RequestMethod.POST)
+	public String deleteDev(@RequestParam String no, RedirectAttributes redirectAttr) {
+		log.info("no = {}", no);
+		try {
+			int result = demoService.deleteDev(no);
+			redirectAttr.addFlashAttribute("msg", "dev 삭제 성공");
+			}catch(Exception e) {
+				log.error("dev 삭제 오류!", e); //에러로그
+				throw e;
+			}
+			return "redirect:/demo/devList.do";
 	}
 }

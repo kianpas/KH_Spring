@@ -36,9 +36,21 @@ public class DemoServiceImpl implements DemoService {
 	}
 
 	@Override
-	public Dev selectOneDevList(String no) {
+	public Dev selectOneDev(String no) {
+	
+		return demoDao.selectOneDev(no);
+	}
+
+	@Override
+	public int updateDev(Dev dev) {
+		
+		return demoDao.updateDev(dev);
+	}
+
+	@Override
+	public int deleteDev(String no) {
 		// TODO Auto-generated method stub
-		return null;
+		return  demoDao.deleteDev(no);
 	}
 	
 	

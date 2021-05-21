@@ -10,5 +10,11 @@ public interface DemoDao {
 
 	List<Dev> selectDevList();
 
+	Dev selectOneDev(String no);
+
+	int updateDev(Dev dev);
+
+	int deleteDev(String no);
+
 	
 }

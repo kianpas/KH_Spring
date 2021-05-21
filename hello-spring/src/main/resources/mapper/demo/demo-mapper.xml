@@ -18,8 +18,27 @@
 	<select id="selectDevList" resultMap="devVoMap">
 	select * from dev order by no desc
 	</select>
+	<select id="selectOneDev" resultMap="devVoMap">
+	select * from dev where no = #{no}
+	</select>
 	<resultMap type="dev" id="devVoMap">
 	<!-- typehandler 생략가능 : @MappedTypes, @MappedJdbcTypes 어노테이션 지정한 경우-->
 		<result column="lang" property="lang" typeHandler="stringArrayTypehandler"/>
 	</resultMap>
+	<update id="updateDev">
+	update  
+			dev 
+	set name = #{name}, career = #{career},
+		email =	#{email},
+		gender = #{gender},
+		lang = #{lang}
+	where 
+		no = #{no}
+	</update>
+	<delete id="deleteDev">
+	delete from 
+		dev
+	where 
+		no = #{no}
+	</delete>
 </mapper>
