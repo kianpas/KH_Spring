@@ -3,9 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
 	<!-- 기본 namespace는 mvc이다. 그러므로 별도의 namespace 등록은 beans:bean 처럼 사용-->
 	<!-- mvc:annotation-drive -->
@@ -32,6 +34,33 @@
 	<!-- base-package하위의 어노테이션을 검색/처리 @Component, @Autowired, @Contrller.. -->
 	<context:component-scan base-package="com.kh.spring" />
 	
+	<!-- #9. interceptor -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/**"/>
+			<beans:bean id="loggerInterceptor" class="com.kh.spring.common.interceptor.LoggerInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/member/**"/>
+			<exclude-mapping path="/member/memberLogin.do"/>
+			<exclude-mapping path="/member/memberEnroll.do"/>
+			<beans:bean id="loginInterceptor" class="com.kh.spring.common.interceptor.LoginInterceptor"/>
+		</interceptor>
+	</interceptors>
 	
+	<!-- #11.1 aop 관련 -->
+	<!-- xml 방식 -->
+	<!-- <beans:bean id="loggerAspect" class="com.kh.spring.common.aop.LoggerAspect"/>
+	<aop:config>
+		<aop:aspect id="loggerAspect" ref="loggerAspect">
+			<aop:pointcut expression="execution(* com.kh.spring.memo..select*(..))" id="loggerPointcut"/>
+			<aop:around method="logger" pointcut-ref="loggerPointcut"/>
+		</aop:aspect>
+	</aop:config> -->
+	<!-- annotation 방식 -->
+	<!-- aop관련 annotation등록
+		root-context의 aop설정을 servlet-context에 적용.
+	 -->
+	<aop:aspectj-autoproxy/>
 	
 </beans:beans>

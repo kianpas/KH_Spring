@@ -52,4 +52,28 @@ create table member(
 		*
 	from
 		member;
+        
+update member
+set password = '$2a$10$.X/tJTzlyStLsHiqemfFcOLr4u8qK8YweBaEtQzHX7Iy7vseyWGg2'
+where id = 'honggd';
 
+update member
+set password = '$2a$10$Eyx4wqnB5QJprnCcHzrJq.KGKmxHgqClpEJcz8pSy0hIw4V/VeB0.'
+where id = 'sinsa';
+
+update member
+set password = '$2a$10$wpuQRKb2vW0ogPE1pz08tOcD9jVIj74p2/qEtSKXbVsTVCv58QUrG'
+where id = 'abcde';
+
+
+--memo테이블 생성
+create table memo(
+    no number,
+    memo varchar2(2000),
+    reg_date date default sysdate,
+    constraint pk_memo_no primary key(no)
+);
+
+create sequence seq_memo_no;
+
+select * from memo;

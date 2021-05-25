@@ -26,6 +26,22 @@
 		from member
 		where id = #{id}
 	</select>
+	<update id="updateMember">
+		update 
+			member
+		set 
+			name = #{name},
+			gender = #{gender},
+			birthday = #{birthday},
+			email = #{email},
+			phone = #{phone},
+			address = #{address},
+			hobby = #{hobby}
+		where 
+			id = #{id}
+	</update>
+	
+	
 	<resultMap type="member" id="memberVoMap">
 	<!-- typehandler 생략가능 : @MappedTypes, @MappedJdbcTypes 어노테이션 지정한 경우-->
 		<result column="hobby" property="hobby" typeHandler="stringArrayTypehandler"/>
