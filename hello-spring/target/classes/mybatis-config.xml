@@ -13,7 +13,7 @@
 		<package name="com.kh.spring"/>
 	</typeAliases>
 	<typeHandlers>
-		<!-- <typeHandler handler="com.kh.spring.common.typehandler.StringArrayTypeHandler"/> -->
+		<!-- <typeHandler handler="com.kh.spring.common.typehandler.StringArrayTypeHandler"/> 커스텀 핸들러를 꼭등록-->
 		<package name="com.kh.spring.common.typehandler"/>
 	</typeHandlers>
 </configuration>

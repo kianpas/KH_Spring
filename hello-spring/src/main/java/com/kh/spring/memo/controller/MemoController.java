@@ -66,9 +66,12 @@ public class MemoController {
 	@PostMapping("/deleteMemo.do")
 	public String deleteMemo(int no, RedirectAttributes redirectAttr) {
 		log.info("no = {}", no);
-		
+		try {
 		int result = memoService.deleteMemo(no);
-		
+		} catch(Exception e) {
+			log.error("메모 삭제 오류!", e);
+			throw e;
+		}
 		return "redirect:/memo/memo.do";
 	}
 	

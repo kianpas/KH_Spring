@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
@@ -144,7 +148,8 @@ public class MemberController {
 							@RequestHeader(name="Referer", required=false) String referer, Model model) {
 		log.info("referer = {}", referer);
 		log.info("next = {}", next);
-		if(referer !=null && next!=null)
+		//next 값이 비어있따면 referer 사용 지정했으면 무시
+		if(next==null && referer !=null  )
 			model.addAttribute("next", referer); // sessionScope에 저장
 	}
 	
@@ -168,14 +173,16 @@ public class MemberController {
 			
 			//세션에 멤버 저장, 모델이 request, session둘다 저장 가능
 			//loginMember를 세션속성으로 저장하려면, class에 @SessionAttributes로 등록
-			model.addAttribute("loginMember", member);			
+			model.addAttribute("loginMember", member);
+			//사용한 next값은 제거
+			model.addAttribute("next", null);
 		} else {
 			//로그인 실패
 			redirectAttr.addFlashAttribute("msg", "아이디 또는 비밀번호가 다릅니다.");
 			return "redirect:/member/memberLogin.do";
 		}
-		
-		return "redirect:"+(next!=null? next:"/");
+		log.debug("next === {}", next);
+		return "redirect:" + (next != null? next:"/");
 	}
 	
 	/**
@@ -264,4 +271,55 @@ public class MemberController {
 		return mav;
 	}
 	
+	/**
+	 * spring ajax(json)
+	 * 1. gson - 응답메세지에 json문자열을 직접 출력
+	 * 2. jsonView 빈을 통해 처리하기 - model에 담긴 데이터를 json으로 변환, 응답에 출력
+	 * 3. @ResponseBody - 리턴된 자바객체를 json으로 변환, 응답에 출력
+	 * 4. ResponseEntity<Map<String, Object>>
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("/checkIdDuplicate1.do")
+	public String checkIdDuplicate1(@RequestParam String id, Model model) {
+		//1. 업무로직
+		Member member = memberService.selectOneMember(id);
+		boolean available = member == null;
+		
+		//2. Model에 속성 저장
+		model.addAttribute("available", available);
+		model.addAttribute(id);		
+		
+		return "jsonView";
+	}
+	
+	
+	@GetMapping("/checkIdDuplicate2.do")
+	@ResponseBody
+	public Map<String, Object> checkIdDuplicate2(@RequestParam String id) {
+		//1. 업무로직
+		Member member = memberService.selectOneMember(id);
+		boolean available = member == null;
+		
+		//2. Map에 속성 저장
+		Map<String, Object> map = new HashMap<>();
+		map.put("available", available);
+		map.put("id", id);		
+		
+		return map;
+	}
+	
+	@GetMapping("/checkIdDuplicate3.do")
+	public ResponseEntity <Map<String, Object>> checkIdDuplicate3(@RequestParam String id) {
+		//1. 업무로직
+		Member member = memberService.selectOneMember(id);
+		boolean available = (member == null);
+		
+		//2. Map에 속성 저장
+		Map<String, Object> map = new HashMap<>();
+		map.put("available", available);
+		map.put("id", id);		
+		
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE).body(map);
+	}
 }
