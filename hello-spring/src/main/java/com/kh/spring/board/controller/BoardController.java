@@ -239,6 +239,7 @@ public class BoardController {
 		return resource;
 		
 	}
+	
 	@GetMapping("/boardSearch.do")
 	public ResponseEntity <Map<String, Object>> boardSearch(@RequestParam String search) {
 		log.debug("searchKeyword = {}", search);
@@ -246,9 +247,20 @@ public class BoardController {
 		List<BoardExt> list = boardService.searchBoardList(search);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("searchList", list);
-		
+		map.put("search", search);
 		return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE)
 				.body(map);
 	}
+	
+	//map으로
+	/*
+	 * @GetMapping("/boardSearch.do") public Map<String, Object>
+	 * searchTitle(@RequestParam String search) { log.debug("searchKeyword = {}",
+	 * search); //board 객체 사용해도 상관없음 List<BoardExt> list =
+	 * boardService.searchBoardList(search); Map<String, Object> map = new
+	 * HashMap<String, Object>(); map.put("searchList", list); map.put("search",
+	 * search); return map; }
+	 */
+	
 	
 }

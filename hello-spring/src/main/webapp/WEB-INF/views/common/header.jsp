@@ -56,6 +56,7 @@
                         </div>
 				    </li>
 				    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/memo/memo.do">Memo(AOP)</a></li>
+				    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/menu/menu.do">Menu(REST)</a></li>
 			    </ul>
 			    <c:if test="${loginMember==null}">
 				    <button class="btn btn-outline-success my-2 my-sm-0" onclick="location.href='${pageContext.request.contextPath}/member/memberLogin.do'"
