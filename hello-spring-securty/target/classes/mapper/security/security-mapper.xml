@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="security">
+	<select id="loadUserByUsername" resultMap="memberMap">
+		select *
+		from 
+			member
+		where 
+			id = #{id}
+	</select>
+	<resultMap type="member" id="memberMap">
+		<id column="id" property="id"/>
+		<result column="password" property="password"/>
+		<result column="name" property="name"/>
+		<result column="gender" property="gender"/>
+		<result column="birthday" property="birthday"/>
+		<result column="email" property="email"/>
+		<result column="phone" property="phone"/>
+		<result column="address" property="address"/>
+		<result column="hobby" property="hobby"/>
+		<result column="enroll_date" property="enrollDate"/>
+		<result column="enabled" property="enabled"/>
+		<collection property="authorities" javaType="arrayList" 
+		column="id" ofType="simpleGrantedAuthority" select="selectAuthorties"/>
+	</resultMap>
+	<select id="selectAuthorties" resultMap="authoritiesMap">
+		select * from authority where id = #{id}
+	</select>
+	<resultMap type="simpleGrantedAuthority" id="authoritiesMap">
+		<constructor>
+			<arg column="authority" javaType="string"/>
+		</constructor>
+	</resultMap>
+</mapper>
+
+
+
+
+
+
+

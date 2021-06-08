@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- #4 BCryptPasswordEncoder : 암호화인코딩 빈등록 -->
+	<beans:bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+	
+	<!-- #5. 권한체크 설정 -->
+	<!-- 정적파일같은 경우 검사 제외 -->
+	<http security="none" pattern="/resources/**"/>
+	<http auto-config="true">
+		<intercept-url pattern="/" access="permitAll"/>
+		<intercept-url pattern="/index.jsp" access="permitAll"/>
+		<intercept-url pattern="/member/memberLogin.do" access="isAnonymous()"/>
+		<intercept-url pattern="/member/memberLoginProcess.do" access="isAnonymous()"/>
+		<intercept-url pattern="/admin/**" access="hasRole('ADMIN')"/>
+		<intercept-url pattern="/**" access="hasRole('USER')"/>
+		<!-- 
+			login-page : 로그인폼페이지 요청 
+			login-process-url : 로그인폼 제출페이지. 핸들러 작성할 필요없음.
+			username-parameter / password-parameter
+			제출폼에서 id/pw에 해당하는 name값이 username/password가 아닌 경우
+		-->
+		<form-login login-page="/member/memberLogin.do"
+			login-processing-url="/member/memberLoginProcess.do"
+			username-parameter="id"
+			password-parameter="password"
+		/>
+		<logout logout-url="/member/memberLogout.do"
+				logout-success-url="/"
+		/>
+	</http>
+	<!-- #6. 인증/권한 검사 manager 빈설정 -->
+	<authentication-manager>
+		<authentication-provider user-service-ref="securityService">
+			<password-encoder ref="bcryptPasswordEncoder"/>
+		</authentication-provider>
+	</authentication-manager>
+	
+	<!-- #7. UserDetails 구현체 빈 등록 -->
+	<context:component-scan base-package="com.kh.spring.security"/>
+	
+</beans:beans>
