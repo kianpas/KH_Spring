@@ -80,7 +80,7 @@ $("#searchTitle").autocomplete({
 	    })
 	  },
 	    select:function(event, selected){
-	    			//클릭했을 때 , 해당 게시그 상세 페이지로 이동
+	    			//클릭했을 때 , 해당 게시글 상세 페이지로 이동
 	    			const {item:{no}} = selected;
 	    			console.log(event);
 	    			console.log(selected.item.no);

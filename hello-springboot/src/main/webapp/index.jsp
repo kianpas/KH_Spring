@@ -290,6 +290,7 @@ div.result {
 			error (xhr, statusText, err){
 				console.log(xhr, statusText, err);
 
+				//컨트롤러에서 responseEntity 사용
 				const {status} = xhr;
 				status == 404 && alert("해당 메뉴가 존재하지 않습니다.");
 				$("[name=id]", e.target).select();
@@ -318,7 +319,8 @@ div.result {
 		//formDate를 활용해서 객체 만들기, 가져올 수 잇지만 보이지는 않음
 		const frmData = new FormData(e.target);
 		const menu = {};
-		
+
+		//가져옴 폼데이터를 foreach 저장
 		frmData.forEach((value, key)=>{
 			menu[key] = value;
 		})
@@ -338,6 +340,7 @@ div.result {
 
 			},
 			error(xhr, statusText, err){
+				//entity 로 받은 에러 출력 switch로 하는 것이 더 나음
 				console.log(xhr, statusText, err);
 				const{status} = xhr;
 				switch(status){

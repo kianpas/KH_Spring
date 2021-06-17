@@ -170,7 +170,7 @@ $.ajax({
 			console.log(xhr, statusText, err);
 		}
 	})
-})
+});
 
 
 $("#passwordCheck").blur(function(){

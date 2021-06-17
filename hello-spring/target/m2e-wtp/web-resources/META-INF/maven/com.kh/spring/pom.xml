@@ -235,7 +235,19 @@
 	    <scope>provided</scope>
 	    <!-- 기본값compile, compile시에는 사용runtime 사용하지 않음 -->
 	</dependency>
-		
+	<!-- #16. websocket 관련 의존  -->
+	 <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-websocket</artifactId>
+        <version>${org.springframework-version}</version>
+    </dependency>	
+    <!-- stomp관련 의존 추가 -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-messaging</artifactId>
+        <version>${org.springframework-version}</version>
+    </dependency>
+    
 	</dependencies>
     <build>
         <plugins>

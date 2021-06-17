@@ -43,6 +43,7 @@
 		<interceptor>
 			<mapping path="/member/**"/>
 			<mapping path="/board/**"/>
+			<mapping path="/ws/stomp.do"/>
 			<exclude-mapping path="/member/memberLogin.do"/>
 			<exclude-mapping path="/member/memberEnroll.do"/>
 			<exclude-mapping path="/member/checkIdDuplicate*.do"/>

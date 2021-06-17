@@ -83,7 +83,7 @@ public class MenuController {
 		}
 	}
 
-	// 잘못된 방식, 하나의 객체로 받는게 효율적ㄴ
+	// 잘못된 방식, 하나의 객체로 받는게 효율적
 	@PostMapping("/menus/{restaurant}/{name}/{price}/{type}/{taste}")
 	public int insertMenu(@PathVariable String restaurant, @PathVariable String name, @PathVariable int price,
 			@PathVariable String type, @PathVariable String taste) {

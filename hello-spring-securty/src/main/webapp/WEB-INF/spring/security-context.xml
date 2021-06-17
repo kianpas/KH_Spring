@@ -34,6 +34,15 @@
 		<logout logout-url="/member/memberLogout.do"
 				logout-success-url="/"
 		/>
+		<!-- remember-me : session-timeout 시간 이상으로 사용자 정보를 관리할 수 있는 옵션 
+			app-context에 존재하는 db 빈 id 사용
+			token-validity-seconds : remember-me 토큰 유효시간 60*60*24*14(초단위)
+		-->
+		<remember-me data-source-ref="dataSource"
+					token-validity-seconds="1209600"
+		/>
+		<!-- 권한 없는 페이지 접근시 처리 -->
+		<access-denied-handler error-page="/error/accessDenied.do"/>
 	</http>
 	<!-- #6. 인증/권한 검사 manager 빈설정 -->
 	<authentication-manager>
